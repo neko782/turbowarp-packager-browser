@@ -128,6 +128,55 @@ const commonFrontendPlugins = () => [
   })
 ];
 
+const makeBrowserPackage = () => ({
+  ...base,
+  devtool: isProduction ? '' : 'source-map',
+  output: {
+    filename: 'packager.browser.js',
+    path: dist,
+    library: 'TurboWarpPackager',
+    libraryTarget: 'umd',
+    globalObject: 'this'
+  },
+  entry: './src/packager/web/export.js',
+  resolve: {
+    mainFields: ['browser', 'module', 'main']
+  },
+  optimization: {
+    splitChunks: false,
+    runtimeChunk: false
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        include: [
+          path.resolve(__dirname, 'src')
+        ],
+        options: {
+          babelrc: false,
+          presets: ['@babel/preset-env']
+        }
+      },
+      {
+        test: /\.png|\.svg$/i,
+        use: [{
+          loader: 'url-loader'
+        }]
+      }
+    ]
+  },
+  plugins: [
+    ...commonFrontendPlugins(),
+    new EagerDynamicImportPlugin(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    }),
+    ...(process.env.BUNDLE_ANALYZER === 'browser-package' ? [new BundleAnalyzerPlugin()] : [])
+  ]
+});
+
 const makeWebsite = () => ({
   ...base,
   devtool: isStandalone ? '' : 'source-map',
@@ -243,8 +292,10 @@ const makeNode = () => ({
 module.exports = [
   makeScaffolding({full: true}),
   makeScaffolding({full: false}),
+  makeBrowserPackage(),
   ...(process.env.BUILD_MODE === 'node' ? [
     makeNode()
+  ] : process.env.BUILD_MODE === 'browser' ? [
   ] : [
     makeWebsite()
   ])
