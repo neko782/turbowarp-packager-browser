@@ -1,7 +1,7 @@
 {
-  "name": "@turbowarp/packager",
+  "name": "turbowarp-packager-browser",
   "version": "3.11.0",
-  "description": "Converts Scratch projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux.",
+  "description": "Converts Scratch projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux. Ported to browser.",
   "main": "dist/packager.browser.js",
   "browser": "dist/packager.browser.js",
   "exports": {
