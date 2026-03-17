@@ -1,11 +1,15 @@
 {
   "name": "turbowarp-packager-browser",
-  "version": "3.11.0",
+  "version": "3.11.1",
   "description": "Converts Scratch projects into HTML files, zip archives, or executable programs for Windows, macOS, and Linux. Ported to browser.",
   "main": "dist/packager.browser.js",
   "browser": "dist/packager.browser.js",
+  "types": "./index.d.ts",
   "exports": {
-    ".": "./dist/packager.browser.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./dist/packager.browser.js"
+    },
     "./scaffolding/addons.js": "./dist/scaffolding/addons.js",
     "./scaffolding/scaffolding-full.js": "./dist/scaffolding/scaffolding-full.js",
     "./scaffolding/scaffolding-min.js": "./dist/scaffolding/scaffolding-min.js",
